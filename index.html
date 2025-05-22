@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Socorro do Lar - Manutenções e Instalações</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-color: #ffd700;
+            --dark-color: #1a1a2e;
+            --light-color: #f8fafc;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,59 +28,113 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: var(--text-primary);
             overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .preloader-logo {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            animation: pulseScale 2s ease-in-out infinite;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         /* Header */
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1rem 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+        }
+
+        header.hidden {
+            transform: translateY(-100%);
         }
 
         header.scrolled {
-            background: rgba(102, 126, 234, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: var(--shadow-light);
         }
 
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 1rem 2rem;
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            animation: slideInLeft 1s ease-out;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s ease;
         }
 
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 2.5rem;
+            align-items: center;
         }
 
         .nav-links a {
-            color: white;
+            color: var(--text-primary);
             text-decoration: none;
-            transition: all 0.3s ease;
+            font-weight: 500;
             position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0.5rem 0;
         }
 
         .nav-links a:hover {
-            color: #ffd700;
+            color: #667eea;
             transform: translateY(-2px);
         }
 
@@ -73,22 +143,32 @@
             position: absolute;
             width: 0;
             height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: #ffd700;
-            transition: width 0.3s ease;
+            bottom: 0;
+            left: 50%;
+            background: var(--primary-gradient);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-50%);
         }
 
         .nav-links a:hover::after {
             width: 100%;
         }
 
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 120px 0 80px;
-            text-align: center;
-            color: white;
+            min-height: 100vh;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
             position: relative;
             overflow: hidden;
         }
@@ -100,359 +180,610 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
-            animation: float 20s ease-in-out infinite;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.03)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.03)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+            animation: float 30s ease-in-out infinite;
+        }
+
+        .hero-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: particleFloat 15s linear infinite;
         }
 
         .hero-content {
-            max-width: 800px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 2rem;
             position: relative;
             z-index: 2;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            animation: fadeInUp 1s ease-out 0.5s both;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            animation: fadeInUp 1s ease-out 0.7s both;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: #ffd700;
-            color: #333;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            animation: fadeInUp 1s ease-out 0.9s both;
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.6);
-            background: #ffed4e;
-        }
-
-        /* Services Section */
-        .services {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #333;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .service-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            opacity: 0;
-            transform: translateY(50px);
-        }
-
-        .service-card.animate {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-
-        .service-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
             color: white;
-            transition: all 0.3s ease;
-        }
-
-        .service-card:hover .service-icon {
-            transform: rotate(360deg);
-        }
-
-        .service-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        .service-card p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        /* About Section */
-        .about {
-            padding: 80px 0;
-            background: white;
-        }
-
-        .about-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 4rem;
             align-items: center;
         }
 
-        .about-text h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #333;
+        .hero-text {
+            animation: slideInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
         }
 
-        .about-text p {
-            color: #666;
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
             margin-bottom: 1.5rem;
-            font-size: 1.1rem;
+            line-height: 1.1;
+            animation: slideInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s both;
         }
 
-        .about-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            font-weight: 400;
+            animation: slideInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.7s both;
+        }
+
+        .hero-cta {
+            display: flex;
             gap: 1rem;
-            margin-top: 2rem;
+            margin-bottom: 3rem;
+            animation: slideInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.9s both;
         }
 
-        .stat {
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button.primary {
+            background: var(--accent-color);
+            color: var(--dark-color);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+        }
+
+        .cta-button.primary:hover {
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+            background: #ffed4e;
+        }
+
+        .cta-button.secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            animation: slideInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 1.1s both;
+        }
+
+        .stat-item {
             text-align: center;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 10px;
         }
 
         .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #667eea;
+            font-size: 2.5rem;
+            font-weight: 800;
             display: block;
+            margin-bottom: 0.5rem;
         }
 
-        .about-image {
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .hero-visual {
+            position: relative;
+            animation: slideInRight 1s cubic-bezier(0.4, 0, 0.2, 1) 0.7s both;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-heavy);
+            animation: floatY 6s ease-in-out infinite;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 120px 0;
+            background: var(--light-color);
             position: relative;
         }
 
-        .about-image img {
-            width: 100%;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-subtitle {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-features {
+            list-style: none;
+        }
+
+        .service-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .service-features li i {
+            color: #667eea;
+            font-size: 0.8rem;
+        }
+
+        /* Process Section */
+        .process {
+            padding: 120px 0;
+            background: white;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .process-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .process-number {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .process-step:not(:last-child) .process-number::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, transparent);
+            transform: translateY(-50%);
+        }
+
+        .process-step h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .process-step p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 120px 0;
+            background: var(--light-color);
+        }
+
+        .testimonials-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-light);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .testimonial-content {
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .author-info h4 {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .author-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .stars {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
         }
 
         /* Contact Section */
         .contact {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 120px 0;
+            background: var(--dark-color);
             color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--primary-gradient);
+            opacity: 0.1;
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
         }
 
         .contact-content {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0 2rem;
-        }
-
-        .contact-info {
-        max-width: 480px;
-        width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
         }
 
         .contact-info h3 {
             font-size: 1.5rem;
-            margin-bottom: 1rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
         }
 
         .contact-item {
             display: flex;
             align-items: center;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
 
         .contact-item:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.1);
             transform: translateX(10px);
         }
 
         .contact-icon {
-            width: 40px;
-            height: 40px;
-            background: #ffd700;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-color);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 1rem;
-            color: #333;
+            color: var(--dark-color);
+            font-size: 1.2rem;
         }
 
         .contact-form {
-            background: rgba(255,255,255,0.1);
-            padding: 2rem;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2.5rem;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: bold;
+            font-weight: 500;
         }
 
         .form-group input,
-        .form-group textarea {
+        .form-group textarea,
+        .form-group select {
             width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.9);
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
             font-size: 1rem;
             transition: all 0.3s ease;
         }
 
         .form-group input:focus,
-        .form-group textarea:focus {
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
-            background: white;
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.15);
             transform: scale(1.02);
         }
 
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
         .submit-btn {
-            background: #ffd700;
-            color: #333;
-            padding: 12px 30px;
+            background: var(--accent-color);
+            color: var(--dark-color);
+            padding: 1rem 2rem;
             border: none;
-            border-radius: 8px;
-            font-weight: bold;
+            border-radius: 50px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         .submit-btn:hover {
             background: #ffed4e;
             transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
         }
 
         /* Footer */
         footer {
-            background: #333;
+            background: #1a202c;
             color: white;
-            text-align: center;
-            padding: 2rem 0;
+            padding: 3rem 0 2rem;
         }
 
-        /* WhatsApp Floating Button */
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #a0aec0;
+            text-decoration: none;
+            line-height: 1.6;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #2d3748;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            text-align: center;
+            color: #a0aec0;
+        }
+
+        /* WhatsApp Float */
         .whatsapp-float {
             position: fixed;
-            width: 60px;
-            height: 60px;
-            bottom: 40px;
-            right: 40px;
-            background-color: #25d366;
+            width: 70px;
+            height: 70px;
+            bottom: 30px;
+            right: 30px;
+            background: #25d366;
             color: white;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 30px;
-            box-shadow: 2px 2px 3px #999;
-            z-index: 100;
-            animation: pulse 2s infinite;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 2rem;
             text-decoration: none;
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-heavy);
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: pulse 2s infinite;
         }
 
         .whatsapp-float:hover {
             transform: scale(1.1);
-            background-color: #128c7e;
-        }
-
-        header {
-            height: 64px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            padding: 0;
-        }
-
-        nav {
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
+            background: #128c7e;
         }
 
         /* Animations */
-        @keyframes fadeInUp {
+        @keyframes slideInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(50px);
             }
             to {
                 opacity: 1;
@@ -460,10 +791,10 @@
             }
         }
 
-        @keyframes slideInLeft {
+        @keyframes slideInRight {
             from {
                 opacity: 0;
-                transform: translateX(-30px);
+                transform: translateX(50px);
             }
             to {
                 opacity: 1;
@@ -476,10 +807,86 @@
             50% { transform: translateY(-20px); }
         }
 
+        @keyframes floatY {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
         @keyframes pulse {
-            0% { transform: scale(1); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        @keyframes pulseScale {
+            0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav {
+            justify-content: center !important;
+        }
+
+        .nav-links, .mobile-menu-btn {
+            display: none !important;
         }
 
         /* Responsive */
@@ -488,103 +895,287 @@
                 display: none;
             }
 
-            .hero h1 {
-                font-size: 2.5rem;
+            .mobile-menu-btn {
+                display: block;
             }
 
-            .about-content {
+            .hero-content {
                 grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 1rem;
             }
 
             .contact-content {
                 grid-template-columns: 1fr;
+                gap: 2rem;
             }
 
             .services-grid {
                 grid-template-columns: 1fr;
             }
+
+            .process-step:not(:last-child) .process-number::after {
+                display: none;
+            }
+
+            .whatsapp-float {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
         }
 
-        /* Scroll animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
 
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .service-card {
+                padding: 1.5rem;
+            }
+
+            .contact-form {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-logo">Socorro do Lar</div>
+    </div>
+
     <!-- Header -->
     <header id="header">
-        <nav>
+        <nav style="justify-content: center;">
             <div class="logo">Socorro do Lar</div>
         </nav>
     </header>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
+        <div class="hero-particles" id="heroParticles"></div>
         <div class="hero-content">
-            <h1>Soluções Completas para sua Casa</h1>
-            <p>Manutenções, instalações de ar-condicionado, montagem de móveis e muito mais. Qualidade e confiança em cada serviço.</p>
-            <a href="https://wa.me/5547996689146?text=Olá! Gostaria de solicitar um orçamento." class="cta-button">Solicite um Orçamento</a>
+            <div class="hero-text">
+                <h1>Transformamos sua casa em um lar perfeito</h1>
+                <p class="hero-subtitle">Soluções completas em manutenção, instalações e reformas com qualidade profissional e preços justos.</p>
+                <div class="hero-cta">
+                    <a href="https://wa.me/5547996689146?text=Olá! Gostaria de solicitar um orçamento." class="cta-button primary">
+                        <i class="fab fa-whatsapp"></i>
+                        Solicitar Orçamento
+                    </a>
+                    <a href="#services" class="cta-button secondary">
+                        <i class="fas fa-arrow-down"></i>
+                        Ver Serviços
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Profissional trabalhando" class="hero-image">
+            </div>
         </div>
     </section>
 
     <!-- Services Section -->
     <section class="services" id="services">
         <div class="container">
-            <h2 class="section-title fade-in">Nossos Serviços</h2>
+            <div class="section-header fade-in">
+                <div class="section-subtitle">NOSSOS SERVIÇOS</div>
+                <h2 class="section-title">Soluções completas para sua casa</h2>
+                <p class="section-description">Oferecemos uma ampla gama de serviços residenciais com qualidade profissional, equipamentos modernos e garantia de satisfação.</p>
+            </div>
             <div class="services-grid">
                 <div class="service-card fade-in">
-                    <div class="service-icon">🔧</div>
+                    <div class="service-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
                     <h3>Manutenções Gerais</h3>
-                    <p>Reparos elétricos, hidráulicos, pintura, e todas as manutenções que sua casa precisa com qualidade e agilidade.</p>
+                    <p>Reparos e manutenções em toda sua residência com agilidade e qualidade garantida.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Reparos elétricos e hidráulicos</li>
+                        <li><i class="fas fa-check"></i> Pintura e acabamentos</li>
+                        <li><i class="fas fa-check"></i> Manutenção preventiva</li>
+                        <li><i class="fas fa-check"></i> Serviços de emergência</li>
+                    </ul>
                 </div>
                 <div class="service-card fade-in">
-                    <div class="service-icon">❄️</div>
-                    <h3>Instalação de Ar-Condicionado</h3>
-                    <p>Instalação profissional de ar-condicionado com garantia. Trabalhamos com todas as marcas e modelos.</p>
+                    <div class="service-icon">
+                        <i class="fas fa-snowflake"></i>
+                    </div>
+                    <h3>Ar-Condicionado</h3>
+                    <p>Instalação, manutenção e reparo de sistemas de climatização com garantia.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Instalação profissional</li>
+                        <li><i class="fas fa-check"></i> Manutenção preventiva</li>
+                        <li><i class="fas fa-check"></i> Limpeza e higienização</li>
+                        <li><i class="fas fa-check"></i> Todas as marcas</li>
+                    </ul>
                 </div>
                 <div class="service-card fade-in">
-                    <div class="service-icon">🪑</div>
+                    <div class="service-icon">
+                        <i class="fas fa-couch"></i>
+                    </div>
                     <h3>Montagem de Móveis</h3>
-                    <p>Montagem especializada de móveis planejados, guarda-roupas, cozinhas e todos os tipos de mobiliário.</p>
+                    <p>Montagem especializada de móveis planejados e modulados com precisão.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Móveis planejados</li>
+                        <li><i class="fas fa-check"></i> Guarda-roupas e cozinhas</li>
+                        <li><i class="fas fa-check"></i> Estantes e prateleiras</li>
+                        <li><i class="fas fa-check"></i> Móveis de escritório</li>
+                    </ul>
                 </div>
                 <div class="service-card fade-in">
-                    <div class="service-icon">🏠</div>
-                    <h3>Reformas Residenciais</h3>
-                    <p>Reformas completas ou parciais, desde pequenos ajustes até grandes transformações em seu lar.</p>
+                    <div class="service-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>Reformas</h3>
+                    <p>Reformas completas ou parciais transformando seu espaço com qualidade.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Reformas completas</li>
+                        <li><i class="fas fa-check"></i> Renovação de ambientes</li>
+                        <li><i class="fas fa-check"></i> Projetos personalizados</li>
+                        <li><i class="fas fa-check"></i> Acompanhamento técnico</li>
+                    </ul>
                 </div>
                 <div class="service-card fade-in">
-                    <div class="service-icon">⚡</div>
-                    <h3>Serviços Elétricos</h3>
-                    <p>Instalações elétricas, troca de disjuntores, quadros elétricos e soluções em elétrica residencial.</p>
+                    <div class="service-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Elétrica</h3>
+                    <p>Serviços elétricos residenciais com segurança e conformidade técnica.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Instalações elétricas</li>
+                        <li><i class="fas fa-check"></i> Quadros e disjuntores</li>
+                        <li><i class="fas fa-check"></i> Tomadas e interruptores</li>
+                        <li><i class="fas fa-check"></i> Iluminação LED</li>
+                    </ul>
                 </div>
                 <div class="service-card fade-in">
-                    <div class="service-icon">🚿</div>
-                    <h3>Serviços Hidráulicos</h3>
-                    <p>Instalação e reparo de torneiras, chuveiros, vazamentos e toda a parte hidráulica de sua residência.</p>
+                    <div class="service-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <h3>Hidráulica</h3>
+                    <p>Soluções hidráulicas completas com materiais de qualidade e garantia.</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> Instalações hidráulicas</li>
+                        <li><i class="fas fa-check"></i> Reparo de vazamentos</li>
+                        <li><i class="fas fa-check"></i> Torneiras e registros</li>
+                        <li><i class="fas fa-check"></i> Sistemas de aquecimento</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section class="about" id="about">
+    <!-- Process Section -->
+    <section class="process" id="process">
         <div class="container">
-            <div class="about-content">
-                <div class="about-text fade-in">
-                    <h2>Por que escolher o Socorro do Lar?</h2>
-                    <p>Oferecemos serviços de qualidade e ferramentas adequadas para cada tipo de trabalho.</p>
-                    <p>Nossa missão é proporcionar tranquilidade e satisfação aos nossos clientes, entregando serviços com excelência, pontualidade e preços justos.</p>
+            <div class="section-header fade-in">
+                <div class="section-subtitle">COMO TRABALHAMOS</div>
+                <h2 class="section-title">Processo simples e eficiente</h2>
+                <p class="section-description">Nosso processo otimizado garante qualidade, agilidade e transparência em cada etapa do seu projeto.</p>
+            </div>
+            <div class="process-steps">
+                <div class="process-step fade-in">
+                    <div class="process-number">1</div>
+                    <h3>Contato Inicial</h3>
+                    <p>Entre em contato conosco via WhatsApp ou formulário. Entendemos sua necessidade e agendamos uma visita técnica gratuita.</p>
                 </div>
-                <div class="about-image fade-in">
-                    <img src="https://images.unsplash.com/photo-1482731215275-a1f151646268?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Equipe ServiçosPro trabalhando">
+                <div class="process-step fade-in">
+                    <div class="process-number">2</div>
+                    <h3>Avaliação & Orçamento</h3>
+                    <p>Realizamos uma avaliação detalhada e apresentamos um orçamento transparente com prazos e materiais especificados.</p>
+                </div>
+                <div class="process-step fade-in">
+                    <div class="process-number">3</div>
+                    <h3>Execução & Entrega</h3>
+                    <p>Iniciamos o trabalho com pontualidade, usando ferramentas adequadas e mantendo você informado sobre o progresso.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="testimonials-container">
+            <div class="section-header fade-in">
+                <div class="section-subtitle">DEPOIMENTOS</div>
+                <h2 class="section-title">O que nossos clientes dizem</h2>
+                <p class="section-description">A satisfação dos nossos clientes é nossa maior conquista. Veja alguns depoimentos de quem já confiou em nosso trabalho.</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-in">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="testimonial-content">
+                        "Excelente profissional! Instalou meu ar-condicionado com muito capricho e pontualidade. Recomendo para todos!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">M</div>
+                        <div class="author-info">
+                            <h4>Maria Silva</h4>
+                            <p>Centro, Joinville</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="testimonial-content">
+                        "Montagem da minha cozinha planejada foi perfeita. Trabalho limpo, organizado e dentro do prazo combinado."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">J</div>
+                        <div class="author-info">
+                            <h4>João Santos</h4>
+                            <p>Anita Garibaldi, Joinville</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="testimonial-content">
+                        "Resolveu um problema elétrico complexo que outros não conseguiram. Muito competente e preço justo!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">A</div>
+                        <div class="author-info">
+                            <h4>Ana Costa</h4>
+                            <p>Zona Norte, Joinville</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -592,38 +1183,88 @@
 
     <!-- Contact Section -->
     <section class="contact" id="contact">
-        <div class="container">
-            <h2 class="section-title">Entre em Contato</h2>
+        <div class="contact-container">
+            <div class="section-header fade-in">
+                <div class="section-subtitle">CONTATO</div>
+                <h2 class="section-title">Vamos transformar sua casa?</h2>
+                <p class="section-description">Entre em contato conosco e receba um orçamento personalizado para seu projeto.</p>
+            </div>
             <div class="contact-content">
                 <div class="contact-info fade-in">
+                    <h3>Fale Conosco</h3>
                     <div class="contact-item">
-                        <div class="contact-icon">📱</div>
+                        <div class="contact-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
                         <div>
                             <strong>WhatsApp</strong><br>
-                            (47) 99668-9146
+                            (47) 99668-9146<br>
+                            <small>Resposta rápida garantida</small>
                         </div>
                     </div>
                     <div class="contact-item">
-                        <div class="contact-icon">📧</div>
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
                         <div>
                             <strong>Email</strong><br>
-                            itamargon45@gmail.com.br
+                            itamargon45@gmail.com<br>
+                            <small>Orçamentos e dúvidas</small>
                         </div>
                     </div>
                     <div class="contact-item">
-                        <div class="contact-icon">📍</div>
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
                         <div>
-                            <strong>Localização</strong><br>
-                            Joinville/SC - Atendemos toda a região
+                            <strong>Área de Atendimento</strong><br>
+                            Joinville/SC e Região<br>
+                            <small>Deslocamento gratuito</small>
                         </div>
                     </div>
                     <div class="contact-item">
-                        <div class="contact-icon">🕐</div>
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
                         <div>
-                            <strong>Horário</strong><br>
-                            8h - 18h
+                            <strong>Horário de Atendimento</strong><br>
+                            Segunda a Sábado: 08h às 18h<br>
+                            <small>Emergências: 24h</small>
                         </div>
                     </div>
+                </div>
+                <div class="contact-form fade-in">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Nome Completo</label>
+                            <input type="text" id="name" name="name" required placeholder="Seu nome completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">WhatsApp</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="(47) 99999-9999">
+                        </div>
+                        <div class="form-group">
+                            <label for="service">Tipo de Serviço</label>
+                            <select id="service" name="service" required>
+                                <option value="">Selecione o serviço</option>
+                                <option value="Manutenções Gerais">Manutenções Gerais</option>
+                                <option value="Instalação de Ar-Condicionado">Instalação de Ar-Condicionado</option>
+                                <option value="Montagem de Móveis">Montagem de Móveis</option>
+                                <option value="Reformas">Reformas</option>
+                                <option value="Serviços Elétricos">Serviços Elétricos</option>
+                                <option value="Serviços Hidráulicos">Serviços Hidráulicos</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Descrição do Projeto</label>
+                            <textarea id="message" name="message" rows="4" placeholder="Descreva detalhes do seu projeto ou serviço desejado"></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <i class="fab fa-whatsapp"></i>
+                            Enviar via WhatsApp
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -631,28 +1272,75 @@
 
     <!-- Footer -->
     <footer>
-        <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Socorro do Lar</h3>
+                <p>Transformando casas em lares perfeitos com qualidade, confiança e dedicação em cada serviço realizado.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Serviços</h3>
+                <p><a href="#services">Manutenções Gerais</a></p>
+                <p><a href="#services">Ar-Condicionado</a></p>
+                <p><a href="#services">Montagem de Móveis</a></p>
+                <p><a href="#services">Reformas</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <p><i class="fab fa-whatsapp"></i> (47) 99668-9146</p>
+                <p><i class="fas fa-envelope"></i> itamargon45@gmail.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Joinville/SC</p>
+            </div>
+            <div class="footer-section">
+                <h3>Horários</h3>
+                <p>Segunda a Sábado: 08h às 18h</p>
+                <p>Emergências: 24h</p>
+                <p>Orçamentos: Gratuitos</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
             <p>&copy; 2025 Socorro do Lar. Todos os direitos reservados. | Qualidade e confiança em cada serviço.</p>
         </div>
     </footer>
 
     <!-- WhatsApp Float -->
     <a href="https://wa.me/5547996689146?text=Olá! Gostaria de solicitar um orçamento." class="whatsapp-float" target="_blank">
-        📱
+        <i class="fab fa-whatsapp"></i>
     </a>
 
     <script>
-        // Header scroll effect
+        // Preloader
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hidden');
+                document.body.style.overflow = 'visible';
+            }, 1500);
+        });
+
+        // Header scroll effects
+        let lastScrollTop = 0;
+        const header = document.getElementById('header');
+
         window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 100) {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Hide/show header on scroll
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                header.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+            }
+            
+            // Add scrolled class
+            if (scrollTop > 50) {
                 header.classList.add('scrolled');
             } else {
                 header.classList.remove('scrolled');
             }
+            
+            lastScrollTop = scrollTop;
         });
 
-        // Smooth scrolling for navigation links
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -666,7 +1354,7 @@
             });
         });
 
-        // Animate elements on scroll
+        // Intersection Observer for animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -676,27 +1364,22 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    
-                    // Animate service cards with delay
-                    if (entry.target.classList.contains('service-card')) {
-                        entry.target.classList.add('animate');
-                    }
                 }
             });
         }, observerOptions);
 
-        // Observe all fade-in elements
-        document.querySelectorAll('.fade-in, .service-card').forEach(el => {
+        // Observe elements
+        document.querySelectorAll('.fade-in, .slide-left, .slide-right').forEach(el => {
             observer.observe(el);
         });
 
-        // Counter animation for stats
+        // Counter animation
         function animateCounters() {
             const counters = document.querySelectorAll('.stat-number');
             
             counters.forEach(counter => {
                 const target = parseInt(counter.getAttribute('data-target'));
-                const increment = target / 50;
+                const increment = target / 100;
                 let current = 0;
                 
                 const updateCounter = () => {
@@ -705,7 +1388,7 @@
                         counter.textContent = Math.ceil(current);
                         requestAnimationFrame(updateCounter);
                     } else {
-                        counter.textContent = target;
+                        counter.textContent = target + (target === 100 ? '%' : '+');
                     }
                 };
                 
@@ -713,77 +1396,134 @@
             });
         }
 
-        // Trigger counter animation when about section is visible
-        const aboutSection = document.querySelector('.about');
-        const aboutObserver = new IntersectionObserver((entries) => {
+        // Trigger counter animation
+        const heroObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    animateCounters();
-                    aboutObserver.unobserve(entry.target);
+                    setTimeout(animateCounters, 1000);
+                    heroObserver.unobserve(entry.target);
                 }
             });
         });
 
-        aboutObserver.observe(aboutSection);
+        heroObserver.observe(document.querySelector('.hero-stats'));
+
+        // Hero particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('heroParticles');
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 4 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createParticles();
 
         // Form submission
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Get form data
             const formData = new FormData(this);
             const name = formData.get('name');
             const phone = formData.get('phone');
             const service = formData.get('service');
             const message = formData.get('message');
             
-            // Create WhatsApp message
-            const whatsappMessage = `Olá! Meu nome é ${name}. Gostaria de solicitar o serviço: ${service}. ${message ? 'Detalhes: ' + message : ''} Meu telefone: ${phone}`;
+            const whatsappMessage = `*Novo Contato - Socorro do Lar*\n\n*Nome:* ${name}\n*Telefone:* ${phone}\n*Serviço:* ${service}\n*Descrição:* ${message || 'Não informado'}\n\nEnviado através do site.`;
             const whatsappURL = `https://wa.me/5547996689146?text=${encodeURIComponent(whatsappMessage)}`;
             
-            // Open WhatsApp
             window.open(whatsappURL, '_blank');
             
-            // Show success message
-            alert('Redirecionando para o WhatsApp! Em breve entraremos em contato.');
+            // Success feedback
+            const submitBtn = this.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> Enviado!';
+            submitBtn.style.background = '#10b981';
             
-            // Reset form
-            this.reset();
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.style.background = '';
+                this.reset();
+            }, 3000);
         });
 
-        // Add floating animation to hero background
-        const heroBackground = document.querySelector('.hero::before');
-        
-        // Add interactive hover effects to service cards
+        // Service cards hover effects
         document.querySelectorAll('.service-card').forEach(card => {
             card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-15px) scale(1.05)';
+                this.style.transform = 'translateY(-15px) scale(1.02)';
             });
             
             card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
+                this.style.transform = '';
             });
         });
 
-        // Add parallax effect to hero section
-        window.addEventListener('scroll', function() {
-            const scrolled = window.pageYOffset;
-            const hero = document.querySelector('.hero');
-            const rate = scrolled * -0.5;
+        // Testimonials auto-scroll (optional)
+        let testimonialIndex = 0;
+        const testimonials = document.querySelectorAll('.testimonial-card');
+        
+        function highlightTestimonial() {
+            testimonials.forEach((card, index) => {
+                if (index === testimonialIndex) {
+                    card.style.transform = 'scale(1.05)';
+                    card.style.boxShadow = '0 20px 40px rgba(102, 126, 234, 0.2)';
+                } else {
+                    card.style.transform = '';
+                    card.style.boxShadow = '';
+                }
+            });
             
-            if (hero) {
-                hero.style.transform = `translateY(${rate}px)`;
+            testimonialIndex = (testimonialIndex + 1) % testimonials.length;
+        }
+
+        // Uncomment to enable auto-highlight testimonials
+        // setInterval(highlightTestimonial, 3000);
+
+        // Mobile menu toggle (if needed)
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            // Add mobile menu functionality here if needed
+            console.log('Mobile menu clicked');
+        });
+
+        // Additional performance optimizations
+        let ticking = false;
+
+        function updateOnScroll() {
+            // Batch scroll updates here
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                requestAnimationFrame(updateOnScroll);
+                ticking = true;
             }
         });
 
-        // Loading animation
-        window.addEventListener('load', function() {
-            document.body.style.opacity = '1';
-            document.body.style.transition = 'opacity 0.5s ease-in-out';
-        });
+        // Lazy loading for images
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
 
-        // Set initial opacity
-        document.body.style.opacity = '0';
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
     </script>
 </body>
 </html>

@@ -891,6 +891,80 @@
             display: none !important;
         }
 
+        .getninjas-float {
+            position: fixed;
+            width: 70px;
+            height: 70px;
+            bottom: 110px; /* deslocado para cima para não sobrepor o whatsapp */
+            right: 30px;
+            background: #ffe600; /* uma cor diferente, um verde azulado */
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            text-decoration: none;
+            box-shadow: var(--shadow-heavy);
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: pulse 2s infinite;
+        }
+
+        .getninjas-float:hover {
+            transform: scale(1.1);
+            background: #21867a;
+        }
+
+        .cta-button.whatsapp-btn{
+            background: #39d869;
+            color: #ffffff;
+        }
+
+        .cta-button.whatsapp-btn:hover {
+            background: #128c7e;
+            box-shadow: 0 12px 40px rgba(18, 140, 126, 0.6);
+        }
+
+        /* Aumentar ícone do WhatsApp */
+        .cta-button.whatsapp-btn i {
+            font-size: 1.6rem;
+        }
+
+        /* Aumentar logo do GetNinjas */
+        .cta-button.getninjas-btn img {
+            width: 28px;
+            height: 28px;
+            margin-right: 0.5rem;
+        }
+
+        /* Ajuste no tamanho da fonte do texto para melhor alinhamento */
+        .cta-button.getninjas-btn {
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #ffe600; /* manter amarelo GetNinjas */
+            color: #1a1a1a;
+            box-shadow: 0 8px 30px rgba(255, 230, 0, 0.4);
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button.getninjas-btn:hover {
+            background: #d4bc00;
+            box-shadow: 0 12px 40px rgba(212, 188, 0, 0.6);
+        }
+
+        /* Aumentar ícone da seta no botão secundário */
+        .cta-button.secondary i {
+            font-size: 1.4rem;
+        }
+
+        /* Espaçamento entre botões */
+        .hero-cta a {
+            white-space: nowrap;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
@@ -1003,9 +1077,13 @@
                 <h1>Transformamos sua casa em um lar perfeito</h1>
                 <p class="hero-subtitle">Soluções completas em manutenção, instalações e reformas com qualidade profissional e preços justos.</p>
                 <div class="hero-cta">
-                    <a href="https://wa.me/5547996689146?text=Olá! Gostaria de solicitar um orçamento." class="cta-button primary">
+                    <a href="https://wa.me/5547996689146?text=Olá! Gostaria de solicitar um orçamento." class="cta-button whatsapp-btn" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-whatsapp"></i>
-                        Solicitar Orçamento
+                        Orçamento WhatsApp
+                    </a>
+                    <a href="https://www.getninjas.com.br/anuncios/reformas-e-reparos/lazer-e-recreacao/outros/socorro-do-lar-marido-de-aluguel-itamar?ref=internal" class="cta-button getninjas-btn" target="_blank" rel="noopener noreferrer" aria-label="GetNinjas">
+                        <img src="logo-getninjas.png" alt="GetNinjas" />
+                        Orçamento GetNinjas
                     </a>
                     <a href="#services" class="cta-button secondary">
                         <i class="fas fa-arrow-down"></i>
@@ -1333,6 +1411,11 @@
     <a href="https://wa.me/5547996689146?text=Olá! Gostaria de solicitar um orçamento." class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
+
+    <!-- GetNinjas Float -->
+    <a href="https://www.getninjas.com.br/anuncios/reformas-e-reparos/lazer-e-recreacao/outros/socorro-do-lar-marido-de-aluguel-itamar?ref=internal" class="getninjas-float" target="_blank" aria-label="GetNinjas">
+        <img src="logo-getninjas.png" alt="GetNinjas" style="width: 40px; height: 40px;">
+      </a>
 
     <script>
         // Preloader
